@@ -2,10 +2,10 @@ from rest_framework import serializers
 from snippets.models import Snippet, LANGUAGE_CHOICES, STYLE_CHOICES
 
 
-class SnippetSerializer(serializers.Serializer):
+class SnippetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Snippet
-        fields = ['id', 'title', 'code', 'linenos', 'lamguage', 'style']
+        fields = ['id', 'title', 'code', 'linenos', 'language', 'style']
 
     def create(self, validated_data):
         """
@@ -24,3 +24,8 @@ class SnippetSerializer(serializers.Serializer):
         instance.style = validated_data.get('style', instance.style)
         instance.save()
         return instance
+
+    def validate_title(self, title):
+        if title == '':
+            raise serializers.ValidationError('title must not be false!')
+        return title
